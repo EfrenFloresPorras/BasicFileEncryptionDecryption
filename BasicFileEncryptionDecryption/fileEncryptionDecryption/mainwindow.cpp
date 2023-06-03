@@ -1,3 +1,21 @@
+/**
+ * @file main.cpp
+ * @brief File Encryption and Decryption Application
+ *
+ * This application provides a simple GUI interface for encrypting and decrypting files using a symmetric encryption algorithm.
+ * It uses Qt framework for the GUI components and file operations.
+ *
+ * The encryption process increments each byte in the file by 1, while the decryption process decrements each byte by 1,
+ * effectively performing a simple symmetric encryption/decryption algorithm.
+ *
+ * The user can select a file to encrypt or a previously encrypted file to decrypt using the provided GUI buttons.
+ * A progress bar shows the progress of the encryption or decryption process.
+ * The bytes of the file before encryption/decryption are displayed in the console.
+ *
+ * @note This application uses a simplistic encryption algorithm for demonstration purposes only.
+ * It should not be considered secure for real-world encryption needs.
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFile>
@@ -24,6 +42,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_encryptionButton_clicked()
 {
+    /**
+     * @brief Slot function for the encryption button click event.
+     * Allows the user to select a file for encryption.
+     * If a file is selected, it calls the encryptFile() function to perform the encryption.
+     */
+    
     QString filePath = QFileDialog::getOpenFileName(this, tr("Select File"), "", tr("All Files (*.*)"));
 
     if (!filePath.isEmpty()) {
@@ -33,6 +57,12 @@ void MainWindow::on_encryptionButton_clicked()
 
 void MainWindow::on_decryptionButton_clicked()
 {
+    /**
+     * @brief Slot function for the decryption button click event.
+     * Allows the user to select an encrypted file for decryption.
+     * If a file is selected, it calls the decryptFile() function to perform the decryption.
+     */
+    
     QString filePath = QFileDialog::getOpenFileName(this, tr("Select Encrypted File"), "", tr("All Files (*.*)"));
 
     if (!filePath.isEmpty()) {
@@ -42,6 +72,13 @@ void MainWindow::on_decryptionButton_clicked()
 
 void MainWindow::displayFileBytes(const QByteArray& fileData)
 {
+    /**
+     * @brief Displays the bytes of the given file data in the console.
+     * Only displays the last 16 bytes.
+     *
+     * @param fileData The byte array representing the file data.
+     */
+    
     qDebug() << "Last 16 File Bytes:";
     int startIndex = qMax(0, fileData.size() - 16);
     for (int i = startIndex; i < fileData.size(); ++i) {
@@ -51,6 +88,16 @@ void MainWindow::displayFileBytes(const QByteArray& fileData)
 
 void MainWindow::encryptFile(const QString &filePath)
 {
+    /**
+     * @brief Encrypts the selected file.
+     * Reads the file data, increments each byte by 1, and writes the encrypted data to a new file.
+     * Displays the bytes of the file before encryption.
+     * Shows a progress bar indicating the encryption progress.
+     * Displays a success message or error message based on the encryption result.
+     *
+     * @param filePath The path of the file to be encrypted.
+     */
+    
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly)) {
         QByteArray fileData = file.readAll();
@@ -85,6 +132,16 @@ void MainWindow::encryptFile(const QString &filePath)
 
 void MainWindow::decryptFile(const QString& filePath)
 {
+    /**
+     * @brief Decrypts the selected encrypted file.
+     * Reads the encrypted file data, decrements each byte by 1, and writes the decrypted data to a new file.
+     * Displays the bytes of the file before decryption.
+     * Shows a progress bar indicating the decryption progress.
+     * Displays a success message or error message based on the decryption result.
+     *
+     * @param filePath The path of the encrypted file to be decrypted.
+     */
+    
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly)) {
         QByteArray fileData = file.readAll();
